@@ -16,7 +16,6 @@ import litellm.utils
 import inspect
 from .adapters import ( 
     HuggingFaceLocalAdapter, 
-    MLXLocalAdapter, 
 )
 from .callbacks import (
     ImageRetentionCallback, 
@@ -210,12 +209,13 @@ class ComputerAgent:
         litellm.custom_provider_map = [
             {"provider": "huggingface-local", "custom_handler": hf_adapter}
         ]
-        mlx_adapter = MLXLocalAdapter(
-            device="auto"
-        )
-        litellm.custom_provider_map = [
-            {"provider": "mlx-local", "custom_handler": mlx_adapter}
-        ]
+        # TODO
+        # mlx_adapter = MLXLocalAdapter(
+        #     device="auto"
+        # )
+        # litellm.custom_provider_map = [
+        #     {"provider": "mlx-local", "custom_handler": mlx_adapter}
+        # ]
 
         # == Initialize computer agent ==
 
