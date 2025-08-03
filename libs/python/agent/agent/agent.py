@@ -14,7 +14,10 @@ import json
 import litellm
 import litellm.utils
 import inspect
-from .adapters import HuggingFaceLocalAdapter
+from .adapters import ( 
+    HuggingFaceLocalAdapter, 
+    MLXLocalAdapter, 
+)
 from .callbacks import (
     ImageRetentionCallback, 
     LoggingCallback, 
@@ -206,6 +209,12 @@ class ComputerAgent:
         )
         litellm.custom_provider_map = [
             {"provider": "huggingface-local", "custom_handler": hf_adapter}
+        ]
+        mlx_adapter = MLXLocalAdapter(
+            device="auto"
+        )
+        litellm.custom_provider_map = [
+            {"provider": "mlx-local", "custom_handler": mlx_adapter}
         ]
 
         # == Initialize computer agent ==
@@ -411,6 +420,10 @@ class ComputerAgent:
             # Perform computer actions
             action = item.get("action")
             action_type = action.get("type")
+            if action_type is None:
+                print(f"Action type cannot be `None`: action={action}, action_type={action_type}")
+                return []
+
             
             # Extract action arguments (all fields except 'type')
             action_args = {k: v for k, v in action.items() if k != "type"}
